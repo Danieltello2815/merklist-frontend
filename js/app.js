@@ -1,76 +1,30 @@
-import { api } from "./api.js";
+import { mostrarUsuarios } from "./vistas/usuarios.js";
+import { mostrarListas } from "./vistas/listas.js";
+import { mostrarLista } from "./vistas/lista.js";
+import { mostrarAviso, mensajeDe } from "./util.js";
+import { mostrarProductos } from "./vistas/productos.js";
+import { mostrarHistorial } from "./vistas/historial.js";
 
-const aviso = document.getElementById("aviso");
-const tabla = document.getElementById("tabla-usuarios");
-const formulario = document.getElementById("form-usuario");
+const contenido = document.getElementById("contenido");
 
-function esc(texto) {
-    const div = document.createElement("div");
-    div.textContent = texto ?? "";
-    return div.innerHTML;
-}
-
-function mostrarAviso(mensaje, tipo = "danger") {
-    aviso.innerHTML = `<div class="alert alert-${tipo}">${esc(mensaje)}</div>`;
-    setTimeout(() => (aviso.innerHTML = ""), 5000);
-}
-
-function mensajeDe(error) {
-    return error instanceof TypeError
-        ? "No se pudo conectar con el backend. ¿Está corriendo en el puerto 8080?"
-        : error.message;
-}
-
-async function cargarUsuarios() {
+async function navegar() {
+    const partes = location.hash.replace(/^#\/?/, "").split("/");
     try {
-        const usuarios = await api.listarUsuarios();
-        tabla.innerHTML = usuarios
-            .map(
-                (u) => `
-      <tr>
-        <td>${u.id}</td>
-        <td>${esc(u.nombre)}</td>
-        <td>${esc(u.correo)}</td>
-        <td>${esc(u.perfil?.ciudad)}</td>
-        <td class="text-end">
-          <button class="btn btn-outline-danger btn-sm" data-eliminar="${u.id}">Eliminar</button>
-        </td>
-      </tr>`
-            )
-            .join("");
+        if (partes[0] === "usuarios" && partes[2] === "listas") {
+            await mostrarListas(contenido, Number(partes[1]));
+        } else if (partes[0] === "listas" && partes[1]) {
+            await mostrarLista(contenido, Number(partes[1]));
+        } else if (partes[0] === "productos") {
+            await mostrarProductos(contenido);
+        } else if (partes[0] === "historial") {
+            await mostrarHistorial(contenido);
+        } else {
+            await mostrarUsuarios(contenido);
+        }
     } catch (error) {
         mostrarAviso(mensajeDe(error));
     }
 }
 
-formulario.addEventListener("submit", async (evento) => {
-    evento.preventDefault();
-    const datos = new FormData(formulario);
-    const usuario = {
-        nombre: datos.get("nombre"),
-        correo: datos.get("correo"),
-        perfil: { telefono: datos.get("telefono"), ciudad: datos.get("ciudad") },
-    };
-    try {
-        await api.crearUsuario(usuario);
-        formulario.reset();
-        mostrarAviso("Usuario creado", "success");
-        cargarUsuarios();
-    } catch (error) {
-        mostrarAviso(mensajeDe(error));
-    }
-});
-
-tabla.addEventListener("click", async (evento) => {
-    const id = evento.target.dataset.eliminar;
-    if (!id) return;
-    try {
-        await api.eliminarUsuario(id);
-        mostrarAviso("Usuario eliminado", "success");
-        cargarUsuarios();
-    } catch (error) {
-        mostrarAviso(mensajeDe(error));
-    }
-});
-
-cargarUsuarios();
+window.addEventListener("hashchange", navegar);
+navegar();
