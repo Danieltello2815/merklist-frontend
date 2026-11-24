@@ -1,27 +1,73 @@
-# MerKlist - Frontend
+¿# Merklist — Frontend
 
-Interfaz web de MerKlist (HTML, CSS, JavaScript con módulos ES y Bootstrap por CDN). Consume la API del backend.
+## Descripción
 
-## Requisitos
-- Backend corriendo en http://localhost:8080 (ver https://github.com/Danieltello2815/merklist)
-- IntelliJ (o cualquier servidor local en el puerto 63342 o 5500)
+Merklist es una aplicación web para la gestión de listas de mercado compartidas, que permite organizar productos, administrar listas de compras y consultar el historial de precios.
 
-## Cómo ejecutarlo
-1. Arrancar el backend.
-2. Abrir `index.html` con IntelliJ (clic derecho → Open in → Browser) o con Live Server en el puerto 5500.
-3. La URL de la API se configura en `js/config.js`.
+El frontend proporciona una interfaz gráfica que permite al usuario interactuar con las funcionalidades del sistema mediante la API REST del backend.
 
-## Pantallas
-- Usuarios
-- Listas de mercado
-- Detalle de lista (ítems y botón "Comprado")
-- Productos y tipos de producto
-- Historial de precios
+## Tecnologías utilizadas
 
-## Estructura
-- `js/api.js`: llamadas a la API
-- `js/app.js`: navegación por `#/ruta`
-- `js/vistas/`: una vista por pantalla
+- HTML5.
+- CSS3.
+- JavaScript con módulos ES.
+- Bootstrap mediante CDN.
+- API REST.
+- Git y GitHub.
+
+## Funcionalidades
+
+- Gestión de usuarios.
+- Gestión de listas de mercado.
+- Administración de los elementos de cada lista.
+- Registro del estado de los productos (pendiente o comprado).
+- Gestión de productos y tipos de producto.
+- Consulta del historial de precios.
+
+## Estructura del proyecto
+
+```text
+merklist-frontend/
+├── css/
+│   └── estilos.css
+├── js/
+│   ├── vistas/
+│   ├── api.js
+│   ├── app.js
+│   ├── config.js
+│   └── util.js
+├── .gitignore
+├── index.html
+└── README.md
+```
+
+| Archivo o directorio | Descripción |
+|---|---|
+| index.html | Página principal de la aplicación. |
+| css/ | Estilos de la interfaz. |
+| js/vistas/ | Vistas de las diferentes pantallas. |
+| api.js | Comunicación con la API del backend. |
+| app.js | Gestión de la navegación entre pantallas. |
+| config.js | Configuración de la URL de la API. |
+| util.js | Funciones auxiliares. |
+
+## Comunicación con el backend
+
+El frontend consume los servicios de la API REST de Merklist para consultar y gestionar la información del sistema.
+
+La dirección de la API se configura en el archivo `js/config.js`.
+
+Repositorio del backend:
+
+https://github.com/Danieltello2815/merklist
+
+## Ejecución
+
+1. Iniciar el backend de Merklist.
+2. Abrir el archivo `index.html` desde IntelliJ IDEA mediante la opción Open in Browser o utilizar Live Server.
+3. Utilizar el puerto 63342 de IntelliJ o el puerto 5500 de Live Server.
 
 ## Autores
-Daniel Tello y Laura Moreno
+
+- Daniel Tello.
+- Laura Moreno.
